@@ -10,6 +10,172 @@ def render_pipe_system_tab(sidebar_data):
     """Renderiza a aba de Sistema de Tubulações"""
     st.header("Sistema de Tubulações em Série")
     
+    # Seção de Teoria e Metodologia
+    with st.expander("📚 Fundamentos Teóricos e Metodologia de Cálculo", expanded=False):
+        st.markdown("""
+        ### 🎯 Metodologia de Resolução Passo a Passo
+        
+        Esta simulação resolve problemas de escoamento interno em dutos seguindo uma sequência lógica 
+        baseada nas leis fundamentais da Mecânica dos Fluidos.
+        """)
+        
+        # Passo 1
+        st.markdown("""
+        ---
+        #### **Passo 1: Propriedades do Fluido** 🧪
+        
+        As propriedades mais relevantes são:
+        - **Massa Específica (ρ)**: Relacionada com as forças de inércia do fluido
+        - **Viscosidade Dinâmica (μ)**: Mede a resistência ao cisalhamento (fonte do atrito)
+        
+        Ambas variam com a temperatura e são obtidas de banco de dados interno.
+        
+        *Exemplo para Água a 20°C:*
+        ```
+        ρ = 998 kg/m³
+        μ = 1.002×10⁻³ Pa·s
+        ```
+        """)
+        
+        # Passo 2
+        st.markdown("""
+        ---
+        #### **Passo 2: Velocidade Média do Escoamento** 💨
+        
+        Baseado no **Princípio da Conservação da Massa** (Equação da Continuidade):
+        """)
+        
+        st.latex(r"A = \frac{\pi D^2}{4}")
+        st.latex(r"V = \frac{Q}{A}")
+        
+        st.markdown("""
+        Onde:
+        - **Q**: Vazão volumétrica (m³/s)
+        - **D**: Diâmetro interno (m)
+        - **A**: Área da seção transversal (m²)
+        - **V**: Velocidade média (m/s)
+        """)
+        
+        # Passo 3
+        st.markdown("""
+        ---
+        #### **Passo 3: Número de Reynolds** 🌀
+        
+        O **Número de Reynolds (Re)** é o parâmetro mais importante em mecânica dos fluidos. 
+        Ele representa a razão entre as **forças de inércia** e as **forças viscosas**.
+        """)
+        
+        st.latex(r"Re = \frac{\rho V D}{\mu}")
+        
+        st.markdown("""
+        **Classificação do Regime:**
+        - 🟢 **Laminar** (Re < 2.300): Movimento suave em camadas
+        - 🟡 **Transição** (2.300 ≤ Re ≤ 4.000): Zona intermediária
+        - 🔴 **Turbulento** (Re > 4.000): Movimento caótico com redemoinhos
+        
+        O regime determina como calculamos o fator de atrito!
+        """)
+        
+        # Passo 4
+        st.markdown("""
+        ---
+        #### **Passo 4: Fator de Atrito de Darcy (f)** ⚙️
+        
+        O fator de atrito quantifica a resistência ao escoamento causada pelo atrito com as paredes.
+        
+        **Para Escoamento Laminar:**
+        """)
+        st.latex(r"f = \frac{64}{Re}")
+        
+        st.markdown("""
+        **Para Escoamento Turbulento:**
+        
+        Usamos a **Equação de Colebrook-White** (implícita):
+        """)
+        st.latex(r"\frac{1}{\sqrt{f}} = -2 \log_{10} \left( \frac{\epsilon/D}{3.7} + \frac{2.51}{Re \sqrt{f}} \right)")
+        
+        st.markdown("""
+        Onde:
+        - **ε**: Rugosidade absoluta da parede (m)
+        - **ε/D**: Rugosidade relativa (adimensional)
+        
+        Esta equação é resolvida numericamente pelo programa.
+        """)
+        
+        # Passo 5
+        st.markdown("""
+        ---
+        #### **Passo 5: Perdas de Carga (hₗ)** 📉
+        
+        A "perda de carga" é a **dissipação de energia mecânica** convertida em calor devido ao atrito.
+        
+        **5.1) Perda Distribuída (ao longo do tubo):**
+        
+        Calculada pela **Equação de Darcy-Weisbach**:
+        """)
+        st.latex(r"h_f = f \frac{L}{D} \frac{V^2}{2g}")
+        
+        st.markdown("""
+        **5.2) Perda Localizada (em acessórios):**
+        
+        Cada acessório causa turbulência adicional:
+        """)
+        st.latex(r"h_s = K \frac{V^2}{2g}")
+        
+        st.markdown("""
+        **Coeficientes K típicos:**
+        - Contração: K = 0.5(1-β²)
+        - Expansão: K = (1-β²)²
+        - Curva 90°: K = 0.3
+        - Válvula gaveta: K = 0.15
+        - Válvula globo: K = 10.0
+        - Válvula esfera: K = 0.05
+        - Válvula retenção: K = 2.5
+        - Tê passagem: K = 0.6
+        - Tê lateral: K = 1.8
+        
+        **Perda Total:**
+        """)
+        st.latex(r"h_L = h_f + \sum h_s")
+        
+        # Passo 6
+        st.markdown("""
+        ---
+        #### **Passo 6: Variação de Pressão** 📊
+        
+        Baseado no **Princípio da Conservação de Energia** (Equação de Bernoulli Estendida):
+        """)
+        st.latex(r"\frac{P_1}{\rho g} + \frac{V_1^2}{2g} + z_1 = \frac{P_2}{\rho g} + \frac{V_2^2}{2g} + z_2 + h_L")
+        
+        st.markdown("""
+        Para diâmetro constante (V₁ = V₂), a pressão em qualquer ponto é:
+        """)
+        st.latex(r"P_i = P_1 - \rho g \left( \Delta z + h_L^{1 \to i} \right)")
+        
+        st.markdown("""
+        Onde:
+        - **Δz**: Variação de elevação (m)
+        - **h_L**: Perda de carga acumulada até o ponto i (m)
+        - **g**: Aceleração da gravidade (9.81 m/s²)
+        
+        ---
+        
+        ### 💡 Como Usar Esta Simulação
+        
+        1. **Configure o fluido e condições** na barra lateral (←)
+        2. **Adicione trechos** com o botão abaixo para modelar seu sistema
+        3. **Configure cada trecho**: material, diâmetro, comprimento, desnível e acessórios
+        4. **Observe os resultados**: O programa calcula automaticamente:
+           - Velocidade e Reynolds em cada trecho
+           - Perdas distribuídas e localizadas
+           - Perfil de pressão ao longo do sistema
+           - Alertas de velocidade
+        
+        5. **Experimente as simulações** na aba correspondente para otimizar seu projeto!
+        """)
+    
+    st.markdown("---")
+    
     # Botões para adicionar/remover tubos
     col_btn1, col_btn2 = st.columns([1, 1])
     with col_btn1:
@@ -259,6 +425,33 @@ def _display_pressure_profile(pipe_results, pipes):
     
     st.plotly_chart(fig_pressure, use_container_width=True)
 
+    # Explicação do gráfico
+    with st.expander("ℹ️ Como interpretar este gráfico", expanded=False):
+        st.markdown("""
+        **O que este gráfico mostra:**
+        
+        Este gráfico representa a **linha de gradiente hidráulico (LGH)** do sistema, mostrando como a 
+        pressão varia ao longo da tubulação desde a entrada até a saída.
+        
+        **Como interpretar:**
+        
+        - **Eixo X (horizontal)**: Posição ao longo do sistema em metros
+        - **Eixo Y (vertical)**: Pressão em kPa em cada ponto
+        - **Inclinação da curva**: Quanto mais inclinada (descendente), maior a perda de pressão naquele trecho[web:2]
+        - **Quedas bruscas**: Indicam perdas localizadas significativas (válvulas, curvas, mudanças de diâmetro)
+        - **Inclinação suave**: Indica perda distribuída por atrito ao longo do tubo
+        
+        **Pontos de atenção:**
+        
+        - ⚠️ **Pressão final muito baixa**: Pode causar problemas no equipamento de saída
+        - ⚠️ **Quedas muito acentuadas**: Indicam trechos com excesso de acessórios ou diâmetro inadequado
+        - ✅ **Ideal**: Curva descendente suave e uniforme, sem quedas bruscas
+        
+        *Na prática, se você instalasse tubos verticais (piezômetros) ao longo da tubulação, 
+        a água subiria até as alturas mostradas neste gráfico.*
+        """)
+
+
 
 def _display_losses_by_section(pipe_results):
     """Exibe gráfico de perdas por trecho"""
@@ -286,3 +479,38 @@ def _display_losses_by_section(pipe_results):
     )
     
     st.plotly_chart(fig_losses, use_container_width=True)
+
+    # Explicação do gráfico
+    with st.expander("ℹ️ Como interpretar este gráfico", expanded=False):
+        st.markdown("""
+        **O que este gráfico mostra:**
+        
+        Este gráfico de barras empilhadas decompõe as perdas de carga em cada trecho do sistema, 
+        permitindo identificar onde ocorrem as maiores dissipações de energia.
+        
+        **Tipos de perda (cores):**
+        
+        - 🔵 **Perda Distribuída (azul)**: Causada pelo **atrito do fluido com as paredes** ao longo 
+          de todo o comprimento do tubo. Calculada pela equação de Darcy-Weisbach[web:6]:
+          - Aumenta com: comprimento do tubo, rugosidade da parede, velocidade do fluido
+          - Diminui com: maior diâmetro do tubo
+        
+        - 🟢 **Perda Localizada (verde)**: Causada pela **turbulência em acessórios** como válvulas, 
+          curvas, expansões e contrações[web:2]:
+          - Cada acessório tem um coeficiente K característico
+          - Proporcionais ao quadrado da velocidade (V²/2g)
+          - Não dependem do comprimento do tubo
+        
+        - 🟡 **Perda/Ganho por Elevação (amarelo)**: Causada pela **diferença de altura** (efeito gravitacional):
+          - Positivo: tubo subindo (perde pressão)
+          - Negativo: tubo descendo (ganha pressão)
+          - Calculado como: ρ·g·Δz
+        
+        **Como usar para otimização:**
+        
+        - Se a **perda distribuída** domina: considere aumentar o diâmetro ou reduzir o comprimento
+        - Se a **perda localizada** domina: reduza o número de acessórios ou use válvulas com menor K
+        - Identifique **gargalos**: trechos com perdas desproporcionalmente altas em relação aos demais
+        
+        *A perda total em cada trecho é a soma das três componentes (altura das barras empilhadas).*
+        """)
