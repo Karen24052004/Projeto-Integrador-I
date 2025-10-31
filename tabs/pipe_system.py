@@ -226,15 +226,6 @@ def render_pipe_system_tab(sidebar_data):
         project_root = Path(__file__).parent.parent
         image_path = project_root / "assets" / "principio-bernoulli.webp"
         
-        # DEBUG: Mostra informações do caminho
-        st.info(f"""
-        **Debug - Informações do Caminho:**
-        - Arquivo atual: `{Path(__file__)}`
-        - Diretório do arquivo: `{Path(__file__).parent}`
-        - Raiz do projeto: `{project_root}`
-        - Caminho da imagem: `{image_path}`
-        - Arquivo existe? **{image_path.exists()}**
-        """)
         
         if image_path.exists():
             st.image(str(image_path), 
