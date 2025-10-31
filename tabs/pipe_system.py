@@ -213,6 +213,45 @@ def render_pipe_system_tab(sidebar_data):
     # Configuração de cada trecho
     for idx, pipe in enumerate(st.session_state.pipes):
         render_pipe_configuration(pipe, idx)
+
+    st.markdown("---")
+    
+    # Imagem do Princípio de Bernoulli
+    st.markdown('<div class="section-title">📐 Diagrama do Princípio de Bernoulli</div>', unsafe_allow_html=True)
+    
+    try:
+        # Tenta carregar a imagem local com tamanho menor
+        st.image("principio-bernoulli.webp", 
+                caption="Princípio de Bernoulli - Conservação de Energia em Escoamentos", 
+                use_container_width=False,
+                width=400)
+    except:
+        # Se der erro, mostra uma mensagem explicativa
+        st.error("""
+        **Arquivo de imagem não encontrado!**
+        
+        Para ver o diagrama do Princípio de Bernoulli, certifique-se de que o arquivo `principio-bernoulli.webp` 
+        está na mesma pasta do seu script Python.
+        """)
+        
+        # Mostra o diagrama alternativo em texto
+        st.markdown("""
+        <div class="bernoulli-container">
+            <h3 style="color: #00d4ff; margin-bottom: 1rem;">Princípio de Bernoulli - Conservação de Energia em Escoamentos</h3>
+            
+            <div class="bernoulli-diagram">
+                <div style="margin-bottom: 1rem;">
+                    <strong style="color: #00d4ff;">Ponto 1 → Ponto 2</strong>
+                </div>
+                <div style="background: #2d4059; padding: 1rem; border-radius: 5px; margin: 1rem 0;">
+                    <div>┌─────────────────────────────────────────────────────────┐</div>
+                    <div>│  P₁, V₁, h₁, A₁                  P₂, V₂, h₂, A₂       │</div>
+                    <div>│  ●─────────→ FLUIDO →─────────→ ●                     │</div>
+                    <div>└─────────────────────────────────────────────────────────┘</div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
     
     st.markdown("---")
     st.markdown('<div class="section-title">📊 Resultados do Sistema</div>', unsafe_allow_html=True)
