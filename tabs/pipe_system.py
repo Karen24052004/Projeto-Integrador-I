@@ -5,6 +5,8 @@ import plotly.graph_objects as go
 from config.settings import GRAVITY, WATER_VELOCITY_MIN, WATER_VELOCITY_MAX, AIR_VELOCITY_MAX
 from components.pipe_config import render_pipe_configuration
 from utils.calculations import calculate_pipe_losses
+import streamlit as st
+from pathlib import Path
 
 def render_pipe_system_tab(sidebar_data):
     """Renderiza a aba de Sistema de Tubulações"""
@@ -220,18 +222,40 @@ def render_pipe_system_tab(sidebar_data):
     st.markdown('<div class="section-title">📐 Diagrama do Princípio de Bernoulli</div>', unsafe_allow_html=True)
     
     try:
-        # Tenta carregar a imagem local com tamanho menor
-        st.image("principio-bernoulli.webp", 
-                caption="Princípio de Bernoulli - Conservação de Energia em Escoamentos", 
-                use_container_width=False,
-                width=400)
-    except:
-        # Se der erro, mostra uma mensagem explicativa
-        st.error("""
-        **Arquivo de imagem não encontrado!**
+        # Caminho da imagem: sobe um nível de tabs/ para project/, depois entra em assets/
+        project_root = Path(__file__).parent.parent
+        image_path = project_root / "assets" / "principio-bernoulli.webp"
         
-        Para ver o diagrama do Princípio de Bernoulli, certifique-se de que o arquivo `principio-bernoulli.webp` 
-        está na mesma pasta do seu script Python.
+        # DEBUG: Mostra informações do caminho
+        st.info(f"""
+        **Debug - Informações do Caminho:**
+        - Arquivo atual: `{Path(__file__)}`
+        - Diretório do arquivo: `{Path(__file__).parent}`
+        - Raiz do projeto: `{project_root}`
+        - Caminho da imagem: `{image_path}`
+        - Arquivo existe? **{image_path.exists()}**
+        """)
+        
+        if image_path.exists():
+            st.image(str(image_path), 
+                    caption="Princípio de Bernoulli - Conservação de Energia em Escoamentos", 
+                    width=400)
+        else:
+            st.error(f"""
+            **Arquivo de imagem não encontrado!**
+            
+            Procurei em: `{image_path}`
+            
+            Certifique-se de que:
+            1. A pasta `assets/` existe na raiz do projeto
+            2. O arquivo `principio-bernoulli.webp` está dentro de `assets/`
+            """)
+            
+    except Exception as e:
+        st.error(f"""
+        **Erro ao tentar carregar a imagem:**
+        
+        {type(e).__name__}: {str(e)}
         """)
         
         # Mostra o diagrama alternativo em texto
