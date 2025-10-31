@@ -43,19 +43,17 @@ if 'pipes' not in st.session_state:
 sidebar_data = create_sidebar()
 
 # Layout principal com abas
-tab1, tab2, tab3, tab4 = st.tabs(["📊 Sistema de Tubos", "🌊 Canais Abertos", "📈 Simulações", "ℹ️ Sobre"])
+tab1, tab2, tab3 = st.tabs(["📊 Sistema de Tubos",  "📈 Simulações", "ℹ️ Sobre"])
 
 with tab1:
     render_pipe_system_tab(sidebar_data)
 
 with tab2:
-    render_open_channels_tab()
-
-with tab3:
     render_simulations_tab(sidebar_data)
 
-with tab4:
+with tab3:
     render_about_tab()
+
 
 # Rodapé
 st.markdown("---")

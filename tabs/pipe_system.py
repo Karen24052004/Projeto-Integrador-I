@@ -373,7 +373,17 @@ def _display_detailed_table(pipe_results):
     } for r in pipe_results])
     
     st.dataframe(df_results, use_container_width=True)
-
+    
+    # Vídeo explicativo
+    st.markdown("### 🎥 Vídeo Explicativo - Perfil de Pressão")
+    
+    # Container estilizado para o vídeo
+    st.markdown('<div class="video-container">', unsafe_allow_html=True)
+    st.video("https://youtu.be/HdKrJqJ6nBg?si=PBJA8rdAr0IdY9fy")
+    st.markdown("""
+    **Vídeo:** Explicação sobre perfil de pressão em sistemas de tubulações
+    """)
+    st.markdown('</div>', unsafe_allow_html=True)
 
 def _display_pressure_profile(pipe_results, pipes):
     """Exibe gráfico de perfil de pressão ao longo do sistema"""
