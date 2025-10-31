@@ -3,7 +3,6 @@ from config.settings import configure_page
 from components.styles import apply_custom_styles
 from components.sidebar import create_sidebar
 from tabs.pipe_system import render_pipe_system_tab
-from tabs.open_channels import render_open_channels_tab
 from tabs.simulations import render_simulations_tab
 from tabs.about import render_about_tab
 
